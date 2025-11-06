@@ -1,0 +1,3 @@
+/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/build/CMakeFiles/sim.dir
+/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/build/CMakeFiles/edit_cache.dir
+/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/build/CMakeFiles/rebuild_cache.dir

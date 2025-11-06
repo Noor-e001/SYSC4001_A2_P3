@@ -1,0 +1,3 @@
+0, 10, FORK invoked
+10, 50, EXEC program1
+60, 25, EXEC program2

@@ -1,0 +1,12 @@
+time: 10; FORK
+1 init 6 1 running
+0 init 6 1 running
+
+time: 60; EXEC program1
+1 init 6 1 running
+0 init 6 1 running
+
+time: 85; EXEC program2
+1 init 6 1 running
+0 init 6 1 running
+
