@@ -38,9 +38,9 @@ SYSC4001_A2_P3/
 
 ## Build Instructions
 1. Open the project in **CLion** under your WSL environment.
-2. Ensure the WSL toolchain is active (`Ubuntu-24.04`, `gcc/g++`, `gdb`, `cmake`).
+2. Ensure the WSL toolchain is active: 'Ubuntu-24.04', 'gcc/g++', 'gdb', 'cmake'
 3. Build the project using:
-   ```bash
+   "bash"
    mkdir -p build && cd build
    cmake ..
    make
