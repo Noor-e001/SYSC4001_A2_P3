@@ -1,170 +1,111 @@
 /**
  * @file Interrupts_101297993_101302793.cpp
- * @brief Implements all helper functions and the simulate_trace function (called from main.cpp)
+ * @brief Implements helper functions defined in interrupts_101297993_101302793.hpp
+ *        and the simulate_trace() used by main.cpp
  */
 
 #include "interrupts_101297993_101302793.hpp"
 #include <iostream>
-using namespace std;
+#include <cctype>
+#include <algorithm>
 
-// ===================== MEMORY & CONSTRUCTORS =====================
-memory_partition_t memory[] = {
-    memory_partition_t(1, 40, "empty"),
-    memory_partition_t(2, 25, "empty"),
-    memory_partition_t(3, 15, "empty"),
-    memory_partition_t(4, 10, "empty"),
-    memory_partition_t(5, 8,  "empty"),
-    memory_partition_t(6, 2,  "empty")
-};
+// ------------------------------
+// local helpers (file-private)
+// ------------------------------
+namespace {
 
-memory_partition_t::memory_partition_t(unsigned int _pn, unsigned int _s, std::string _c)
-    : partition_number(_pn), size(_s), code(_c) {}
+/** trim from left */
+inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+            [](unsigned char ch){ return !std::isspace(ch); }));
+}
 
-PCB::PCB(unsigned int _pid, int _ppid, std::string _pn, unsigned int _size, int _part_num)
-    : PID(_pid), PPID(_ppid), program_name(_pn), size(_size), partition_number(_part_num) {}
+/** trim from right */
+inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+            [](unsigned char ch){ return !std::isspace(ch); }).base(), s.end());
+}
 
-// ===================== FUNCTION DEFINITIONS =====================
-bool allocate_memory(PCB* current) {
-    for (int i = 5; i >= 0; i--) {
-        if (memory[i].size >= current->size && memory[i].code == "empty") {
-            current->partition_number = memory[i].partition_number;
-            memory[i].code = current->program_name;
-            return true;
+/** trim both */
+inline void trim(std::string &s) { ltrim(s); rtrim(s); }
+
+/** split on a single char delimiter, keep empty fields if any */
+std::vector<std::string> split_comma(const std::string &line) {
+    std::vector<std::string> out;
+    std::string cur;
+    for (char c : line) {
+        if (c == ',') {
+            out.push_back(cur);
+            cur.clear();
+        } else {
+            cur.push_back(c);
         }
     }
-    return false;
+    out.push_back(cur);
+    return out;
 }
 
-void free_memory(PCB* process) {
-    if (process->partition_number > 0)
-        memory[process->partition_number - 1].code = "empty";
-    process->partition_number = -1;
-}
+} // namespace
 
-std::vector<std::string> split_delim(std::string input, std::string delim) {
-    std::vector<std::string> tokens;
-    std::size_t pos = 0;
-    std::string token;
-    while ((pos = input.find(delim)) != std::string::npos) {
-        token = input.substr(0, pos);
-        tokens.push_back(token);
-        input.erase(0, pos + delim.length());
-    }
-    tokens.push_back(input);
-    return tokens;
-}
+// ======================================================================
+// Robust parse_trace()  (DEFINITION lives in this .cpp; only DECLARE in .hpp)
+// ======================================================================
+std::tuple<std::string, int, std::string> parse_trace(std::string traceLine) {
+    // Ignore empty or whitespace-only lines
+    std::string raw = traceLine;
+    trim(raw);
+    if (raw.empty()) return {"null", -1, "null"};
 
-std::tuple<std::vector<std::string>, std::vector<int>, std::vector<external_file>>
-parse_args(int argc, char** argv) {
-    if (argc != 5) {
-        std::cerr << "ERROR! Expected 4 arguments, received " << argc - 1 << std::endl;
-        exit(1);
+    // Split by comma safely, then trim each token
+    auto parts = split_comma(raw);
+    for (auto &p : parts) trim(p);
+
+    if (parts.size() < 2) {
+        // minimal: ACTIVITY, NUMBER  (e.g., "CPU, 10")
+        // If malformed, signal to caller to skip
+        return {"null", -1, "null"};
     }
 
-    std::ifstream input_file;
-    std::vector<std::string> vectors;
-    std::vector<int> delays;
-    std::vector<external_file> external_files;
+    std::string activity = parts[0];   // e.g. "CPU" or "EXEC program1"
+    std::string numToken = parts[1];   // e.g. "10"
+    std::string program  = "null";
 
-    // vector table
-    input_file.open(argv[2]);
-    if (!input_file.is_open()) { std::cerr << "Error: Unable to open file: " << argv[2] << std::endl; exit(1); }
-    std::string line;
-    while (std::getline(input_file, line)) vectors.push_back(line);
-    input_file.close();
+    // Detect EXEC with program name embedded in the activity token
+    // Accept both "EXEC program1" and "EXEC   program1"
+    {
+        // split activity by spaces
+        std::vector<std::string> toks;
+        std::string cur;
+        for (char c : activity) {
+            if (std::isspace(static_cast<unsigned char>(c))) {
+                if (!cur.empty()) { toks.push_back(cur); cur.clear(); }
+            } else cur.push_back(c);
+        }
+        if (!cur.empty()) toks.push_back(cur);
 
-    // device table
-    input_file.open(argv[3]);
-    if (!input_file.is_open()) { std::cerr << "Error: Unable to open file: " << argv[3] << std::endl; exit(1); }
-    while (std::getline(input_file, line)) delays.push_back(std::stoi(line));
-    input_file.close();
-
-    // external files
-    input_file.open(argv[4]);
-    if (!input_file.is_open()) { std::cerr << "Error: Unable to open file: " << argv[4] << std::endl; exit(1); }
-    while (std::getline(input_file, line)) {
-        auto parts = split_delim(line, ",");
-        external_file ef{ parts[0], static_cast<unsigned int>(std::stoi(parts[1])) };
-        external_files.push_back(ef);
+        if (!toks.empty() && toks[0] == "EXEC") {
+            activity = "EXEC";
+            if (toks.size() >= 2) program = toks[1];
+        }
     }
-    input_file.close();
 
-    return { vectors, delays, external_files };
-}
-
-std::tuple<std::string, int, std::string> parse_trace(std::string trace) {
-    auto parts = split_delim(trace, ",");
-    if (parts.size() < 2) return {"null", -1, "null"};
-
-    auto activity = parts[0];
-    auto duration_intr = std::stoi(parts[1]);
-    std::string extern_file = "null";
-
-    auto exec = split_delim(parts[0], " ");
-    if (exec[0] == "EXEC") {
-        extern_file = exec[1];
-        activity = "EXEC";
+    // Safely parse the number (duration / intr #)
+    int value = -1;
+    try {
+        trim(numToken);
+        // Allow tokens like "10  " or "  10"
+        value = std::stoi(numToken);
+    } catch (...) {
+        // If non-numeric, tell caller to skip line
+        return {"null", -1, "null"};
     }
-    return {activity, duration_intr, extern_file};
+
+    return {activity, value, program};
 }
 
-std::pair<std::string, int> intr_boilerplate(int current_time, int intr_num, int context_save_time, std::vector<std::string> vectors) {
-    std::string execution = "";
-    execution += std::to_string(current_time) + ", 1, switch to kernel mode\n";
-    current_time++;
-    execution += std::to_string(current_time) + ", " + std::to_string(context_save_time) + ", context saved\n";
-    current_time += context_save_time;
-
-    char vector_address_c[10];
-    sprintf(vector_address_c, "0x%04X", (ADDR_BASE + (intr_num * VECTOR_SIZE)));
-    std::string vector_address(vector_address_c);
-
-    execution += std::to_string(current_time) + ", 1, find vector " + std::to_string(intr_num) +
-                 " in memory position " + vector_address + "\n";
-    current_time++;
-    execution += std::to_string(current_time) + ", 1, load address " + vectors.at(intr_num) + " into the PC\n";
-    current_time++;
-    return {execution, current_time};
-}
-
-void write_output(std::string execution, const char* filename) {
-    std::ofstream output_file(filename);
-    if (output_file.is_open()) {
-        output_file << execution;
-        output_file.close();
-        std::cout << "Saved output to " << filename << std::endl;
-    } else {
-        std::cerr << "Error opening file: " << filename << std::endl;
-    }
-}
-
-void print_external_files(std::vector<external_file> files) {
-    const int tableWidth = 24;
-    std::cout << "List of external files (" << files.size() << "):\n";
-    std::cout << "+" << std::setfill('-') << std::setw(tableWidth) << "+\n";
-    for (const auto& file : files)
-        std::cout << "| " << std::setw(10) << file.program_name << " | " << std::setw(10) << file.size << " |\n";
-    std::cout << "+" << std::setfill('-') << std::setw(tableWidth) << "+\n";
-}
-
-std::string print_PCB(PCB current, std::vector<PCB> _PCB) {
-    std::stringstream ss;
-    ss << "PID=" << current.PID << " (" << current.program_name << "), partition=" << current.partition_number << "\n";
-    for (auto& p : _PCB)
-        ss << "WAIT PID=" << p.PID << " (" << p.program_name << ")\n";
-    return ss.str();
-}
-
-unsigned int get_size(std::string name, std::vector<external_file> external_files) {
-    for (auto& file : external_files)
-        if (file.program_name == name)
-            return file.size;
-    return 0;
-}
-
-// ================================================================
-// simulate_trace implementation
-// ================================================================
+// ======================================================================
+// simulate_trace()  (DEFINITION lives in this .cpp; only DECLARE in .hpp)
+// ======================================================================
 std::tuple<std::string, std::string, int>
 simulate_trace(std::vector<std::string> trace_file,
                int time,
@@ -174,32 +115,144 @@ simulate_trace(std::vector<std::string> trace_file,
                PCB current,
                std::vector<PCB> wait_queue)
 {
-    std::string trace;
-    std::string execution = "";
-    std::string system_status = "";
+    std::string execution;
+    std::string system_status;
     int current_time = time;
 
     for (size_t i = 0; i < trace_file.size(); i++) {
-        auto trace = trace_file[i];
-        auto [activity, duration_intr, program_name] = parse_trace(trace);
+        const std::string &raw = trace_file[i];
+        auto [activity, duration_intr, program_name] = parse_trace(raw);
+
+        // Skip malformed/blank lines
+        if (activity == "null" || duration_intr < 0) continue;
+
         if (activity == "CPU") {
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", CPU Burst\n";
             current_time += duration_intr;
         }
         else if (activity == "SYSCALL") {
-            auto [intr, time] = intr_boilerplate(current_time, duration_intr, 10, vectors);
-            execution += intr;
-            current_time = time;
-            execution += std::to_string(current_time) + ", " + std::to_string(delays[duration_intr]) + ", SYSCALL ISR\n";
-            current_time += delays[duration_intr];
+            auto [intr, t] = intr_boilerplate(current_time, duration_intr, 10, vectors);
+            execution += intr; current_time = t;
+
+            if (duration_intr >= 0 && duration_intr < static_cast<int>(delays.size()))
+                execution += std::to_string(current_time) + ", " + std::to_string(delays[duration_intr]) + ", SYSCALL ISR\n";
+            else
+                execution += std::to_string(current_time) + ", 0, SYSCALL ISR (unknown device)\n";
+
+            current_time += (duration_intr >= 0 && duration_intr < static_cast<int>(delays.size())) ? delays[duration_intr] : 0;
             execution += std::to_string(current_time) + ", 1, IRET\n";
             current_time += 1;
         }
-        // ... [same simulate_trace body as before]
-        // keep the rest of your simulate_trace code exactly as you had it
-        // (I omitted for brevity — your version is already correct)
+        else if (activity == "END_IO") {
+            auto [intr, t] = intr_boilerplate(current_time, duration_intr, 10, vectors);
+            execution += intr; current_time = t;
+
+            if (duration_intr >= 0 && duration_intr < static_cast<int>(delays.size()))
+                execution += std::to_string(current_time) + ", " + std::to_string(delays[duration_intr]) + ", ENDIO ISR\n";
+            else
+                execution += std::to_string(current_time) + ", 0, ENDIO ISR (unknown device)\n";
+
+            current_time += (duration_intr >= 0 && duration_intr < static_cast<int>(delays.size())) ? delays[duration_intr] : 0;
+            execution += std::to_string(current_time) + ", 1, IRET\n";
+            current_time += 1;
+        }
+        else if (activity == "FORK") {
+            auto [intr, t] = intr_boilerplate(current_time, 2, 10, vectors);
+            execution += intr; current_time = t;
+
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", cloning the PCB\n";
+            current_time += duration_intr;
+            execution += std::to_string(current_time) + ", 0, scheduler called\n";
+            execution += std::to_string(current_time) + ", 1, IRET\n";
+            current_time += 1;
+
+            // collect child-only trace block
+            std::vector<std::string> child_trace;
+            bool skip = true;
+            bool exec_seen = false;
+            size_t parent_index = i;
+
+            for (size_t j = i; j < trace_file.size(); j++) {
+                auto [act, dur, pn] = parse_trace(trace_file[j]);
+                if (skip && act == "IF_CHILD") { skip = false; continue; }
+                else if (act == "IF_PARENT") {
+                    skip = true;
+                    parent_index = j;
+                    if (exec_seen) break;
+                } else if (skip && act == "ENDIF") { skip = false; continue; }
+                else if (!skip && act == "EXEC") { exec_seen = true; child_trace.push_back(trace_file[j]); skip = true; }
+
+                if (!skip) child_trace.push_back(trace_file[j]);
+            }
+
+            i = parent_index; // continue loop from parent's section
+
+            // run child
+            PCB new_process = { current.PID + 1, static_cast<int>(current.PID),
+                                current.program_name, current.size, 0 };
+            allocate_memory(&new_process);
+            wait_queue.push_back(current);
+            current = new_process;
+
+            auto status_string = "time: " + std::to_string(current_time) + "; FORK";
+            std::cout << status_string << "\n" << print_PCB(current, wait_queue) << "\n";
+            system_status += status_string + "\n" + print_PCB(current, wait_queue) + "\n";
+
+            auto [child_exec, child_status, child_time] =
+                simulate_trace(child_trace, current_time, vectors, delays, external_files, current, wait_queue);
+            execution += child_exec;
+            system_status += child_status;
+            current_time = child_time;
+        }
+        else if (activity == "EXEC") {
+            auto [intr, t] = intr_boilerplate(current_time, 3, 10, vectors);
+            execution += intr; current_time = t;
+
+            unsigned int prog_size = get_size(program_name, external_files);
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) +
+                         ", Program is " + std::to_string(prog_size) + "MB large\n";
+            current_time += duration_intr;
+
+            int prog_time = static_cast<int>(prog_size) * 15;
+            execution += std::to_string(current_time) + ", " + std::to_string(prog_time) + ", loading program into memory\n";
+            current_time += prog_time;
+
+            execution += std::to_string(current_time) + ", 3, marking partition as occupied\n";
+            current_time += 3;
+            execution += std::to_string(current_time) + ", 6, updating PCB\n";
+            current_time += 6;
+            execution += std::to_string(current_time) + ", 0, scheduler called\n";
+            execution += std::to_string(current_time) + ", 1, IRET\n";
+            current_time += 1;
+
+            // load the external program's own trace
+            std::ifstream exec_trace_file("input_files/" + program_name + ".txt");
+            std::vector<std::string> exec_traces;
+            std::string line;
+            while (std::getline(exec_trace_file, line)) exec_traces.push_back(line);
+
+            current.program_name = program_name;
+            current.size = prog_size;
+            free_memory(&current);
+            allocate_memory(&current);
+
+            auto status_string = "time: " + std::to_string(current_time) + "; EXEC " + program_name;
+            std::cout << status_string << "\n" << print_PCB(current, wait_queue) << "\n";
+            system_status += status_string + "\n" + print_PCB(current, wait_queue) + "\n";
+
+            auto [exec_execution, exec_status, exec_time] =
+                simulate_trace(exec_traces, current_time, vectors, delays, external_files, current, wait_queue);
+            execution += exec_execution;
+            system_status += exec_status;
+            current_time = exec_time;
+
+            // return to caller after external program finishes (matches original flow)
+            return {execution, system_status, current_time};
+        }
+        // else: ignore unknown activities silently
     }
 
+    // wrap up
     free_memory(&current);
     if (!wait_queue.empty()) {
         current = wait_queue.front();
