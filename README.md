@@ -50,8 +50,8 @@ SYSC4001_A2_P3/
 
 ## Output
 Simulation results are generated under the output_files/ directory:
-execution.txt → shows the chronological execution events (FORK, EXEC)
-system_status.txt → displays system states at each timestamp
+execution.txt: shows the chronological execution events (FORK, EXEC)
+system_status.txt: displays system states at each timestamp
 
 Example:
 
