@@ -1,2 +1,6 @@
-This is a placeholder file representing Program 1.
-Simulated by the EXEC command at time 50.
+Program name: program1
+Memory required: 10
+CPU Burst 1: 10
+I/O start (device=2)
+CPU Burst 2: 20
+End of program

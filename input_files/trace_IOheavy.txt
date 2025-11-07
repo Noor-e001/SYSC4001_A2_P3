@@ -1,0 +1,20 @@
+0, 1, FORK
+1, 5, I/O start (device=2)
+6, 1, IRET
+7, 10, CPU Burst
+17, 1, switch to kernel mode
+18, 10, I/O start (device=3)
+28, 1, IRET
+29, 20, CPU Burst
+49, 1, switch to kernel mode
+50, 10, EXEC program1
+60, 1, IRET
+61, 15, CPU Burst
+76, 1, switch to kernel mode
+77, 25, I/O start (device=2)
+102, 1, IRET
+103, 5, CPU Burst
+108, 1, switch to kernel mode
+109, 10, EXEC program2
+119, 1, IRET
+120, 10, CPU Burst

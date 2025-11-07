@@ -1,0 +1,16 @@
+0, 1, switch to kernel mode
+1, 10, FORK
+11, 1, IRET
+12, 15, CPU Burst
+27, 1, switch to kernel mode
+28, 10, EXEC program1
+38, 1, IRET
+39, 25, CPU Burst
+64, 1, switch to kernel mode
+65, 20, EXEC program2
+85, 1, IRET
+86, 15, CPU Burst
+101, 1, switch to kernel mode
+102, 50, EXEC program3
+152, 1, IRET
+153, 20, CPU Burst
