@@ -1,0 +1,2 @@
+This is a placeholder file representing Program 1.
+Simulated by the EXEC command at time 50.
