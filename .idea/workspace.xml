@@ -23,7 +23,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9423b45b-f669-4413-85be-804b5f68bbbe" name="Changes" comment="" />
+    <list default="true" id="9423b45b-f669-4413-85be-804b5f68bbbe" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input_files/program1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input_files/program2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +38,9 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
     <option name="majorVersion" value="2025" />
@@ -44,6 +52,9 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="357OIhyKMMN2xMraiXkGS44Giw8" />
+  <component name="ProjectStatusUIService"><![CDATA[{
+  "uiKindId": "Widget"
+}]]></component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -58,8 +69,10 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "RunOnceActivity.west.config.association.type.startup.service": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "//wsl$/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -71,11 +84,6 @@
   }
 }]]></component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="sim" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SYSC4001_A2_P3" TARGET_NAME="sim" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SYSC4001_A2_P3" RUN_TARGET_NAME="sim">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -91,6 +99,7 @@
       <updated>1762457569237</updated>
       <workItem from="1762457569467" duration="8000" />
       <workItem from="1762457600745" duration="617000" />
+      <workItem from="1762458230342" duration="2238000" />
     </task>
     <servers />
   </component>
