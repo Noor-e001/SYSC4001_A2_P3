@@ -1,76 +1,83 @@
-#ifndef INTERRUPTS_STUDENTS_HPP
-#define INTERRUPTS_STUDENTS_HPP
+#ifndef INTERRUPTS_HPP_
+#define INTERRUPTS_HPP_
 
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <deque>
-#include <fstream>
+#include <random>
+#include <utility>
+#include <sstream>
+#include <iomanip>
+#include <algorithm>
+#include <stdio.h>
 
-struct Partition {
-    unsigned int number;
-    unsigned int sizeMB;
+using namespace std;
+
+#define ADDR_BASE   0
+#define VECTOR_SIZE 2
+
+// ===================== STRUCTS =====================
+struct memory_partition_t {
+    const unsigned int partition_number;
+    const unsigned int size;
     std::string code;
+
+    memory_partition_t(unsigned int _pn, unsigned int _s, std::string _c);
 };
 
-enum class ProcState { RUNNING, WAITING };
+extern memory_partition_t memory[];
 
 struct PCB {
-    int pid;
-    std::string programName;
-    int partitionNumber;
-    unsigned int programSizeMB;
-    ProcState state;
+    unsigned int PID;
+    int PPID;
+    std::string program_name;
+    unsigned int size;
+    int partition_number;
+
+    PCB(unsigned int _pid, int _ppid, std::string _pn, unsigned int _size, int _part_num);
 };
 
-struct ExternalFile {
-    std::string name;
-    unsigned int sizeMB;
+struct external_file {
+    std::string program_name;
+    unsigned int size;
 };
 
-enum class TraceKind {
-    CPU, SYSCALL, END_IO, FORK, EXEC,
-    IF_CHILD, IF_PARENT, ENDIF
-};
+// ===================== FUNCTION DECLARATIONS =====================
 
-struct TraceLine {
-    TraceKind kind;
-    std::string argStr;
-    int value;
-    std::string raw;
-};
+// Memory management
+bool allocate_memory(PCB* current);
+void free_memory(PCB* process);
 
-class Simulator {
-public:
-    explicit Simulator(const std::string& inputDir, const std::string& outputDir);
-    void loadAll();
-    void run();
+// String utilities
+std::vector<std::string> split_delim(std::string input, std::string delim);
 
-private:
-    void loadExternalFiles();
-    void loadTrace(const std::string& fileName, std::vector<TraceLine>& out);
-    void runProgram(std::vector<TraceLine>& trace);
+// Parsing functions
+std::tuple<std::vector<std::string>, std::vector<int>, std::vector<external_file>>
+parse_args(int argc, char** argv);
 
-    void handleCPU(int ms);
-    void handleSYSCALL(int dev);
-    void handleENDIO(int dev);
-    void handleFORK(int isrMs);
-    void handleEXEC(const std::string& progName, int isrMs);
-    void callScheduler();
-    int findFreePartition(unsigned int sizeMB) const;
-    void markPartition(int partIdx, const std::string& code);
-    void snapshotSystem(const std::string& currentTraceRaw);
-    void execLogLine(int duration, const std::string& message);
+std::tuple<std::string, int, std::string> parse_trace(std::string trace);
 
-    std::vector<Partition> partitions;
-    std::unordered_map<std::string, unsigned int> externalMap;
-    std::unordered_map<int, PCB> pcbTable;
+// Interrupt handler utilities
+std::pair<std::string, int>
+intr_boilerplate(int current_time, int intr_num, int context_save_time, std::vector<std::string> vectors);
 
-    long long nowMs = 0;
-    std::ofstream execLog;
-    std::ofstream statusLog;
-    int nextPid = 1;
-    int currentPid = 0;
-};
+// Output functions
+void write_output(std::string execution, const char* filename);
+void print_external_files(std::vector<external_file> files);
+std::string print_PCB(PCB current, std::vector<PCB> _PCB);
 
-#endif
+// External program management
+unsigned int get_size(std::string name, std::vector<external_file> external_files);
+
+// Simulation function
+std::tuple<std::string, std::string, int>
+simulate_trace(std::vector<std::string> trace_file,
+               int time,
+               std::vector<std::string> vectors,
+               std::vector<int> delays,
+               std::vector<external_file> external_files,
+               PCB current,
+               std::vector<PCB> wait_queue);
+
+#endif // INTERRUPTS_HPP_

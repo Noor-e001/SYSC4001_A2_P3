@@ -2,5 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3" vcs="Git" />
   </component>
 </project>

@@ -23,11 +23,47 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9423b45b-f669-4413-85be-804b5f68bbbe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input_files/program1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input_files/program2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9423b45b-f669-4413-85be-804b5f68bbbe" name="Changes" comment="Added placeholder program files">
+      <change afterPath="$PROJECT_DIR$/input_files/external_files_1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output_files/execution_1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output_files/system_status_1.txt" afterDir="false" />
+      <change afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/external_files_1.txt" afterDir="false" />
+      <change afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/output_files/execution_1.txt" afterDir="false" />
+      <change afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/output_files/system_status_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interrupts_101297993_101302793.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Interrupts_101297993_101302793.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/sim" beforeDir="false" afterPath="$PROJECT_DIR$/bin/sim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/device_table.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/device_table.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/external_files.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/program1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/program1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/program2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/program2_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/program3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/program3_5.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/trace.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/trace_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/trace_IOheavy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/trace_4.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/trace_MixedExec.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/trace_5.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_files/vector_table.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_files/vector_table.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interrupts_101297993_101302793.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/interrupts_101297993_101302793.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output_files/execution.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output_files/system_status.txt" beforeDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/CMakeLists.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/CMakeLists.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/Interrupts_101297993_101302793.cpp" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/Interrupts_101297993_101302793.cpp" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/bin/sim" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/bin/sim" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/build.sh" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/build.sh" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/device_table.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/device_table.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/external_files.txt" beforeDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/program1.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/program1.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/program2.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/program2_1.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/program3.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/program3_5.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/trace.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/trace_1.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/trace_IOheavy.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/trace_4.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/trace_MixedExec.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/trace_5.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/vector_table.txt" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/input_files/vector_table.txt" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/interrupts_101297993_101302793.hpp" beforeDir="false" afterPath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/interrupts_101297993_101302793.hpp" afterDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/main.cpp" beforeDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/output_files/execution.txt" beforeDir="false" />
+      <change beforePath="//wsl.localhost/Ubuntu-24.04/home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3/output_files/system_status.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,9 +88,12 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="357OIhyKMMN2xMraiXkGS44Giw8" />
-  <component name="ProjectStatusUIService"><![CDATA[{
-  "uiKindId": "Widget"
-}]]></component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectStatusUIService">{
+  &quot;uiKindId&quot;: &quot;Widget&quot;
+}</component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -70,6 +109,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "RunOnceActivity.west.config.association.type.startup.service": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "I do mind",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "main",
@@ -84,7 +124,12 @@
   }
 }]]></component>
   <component name="RunManager">
-    <configuration name="sim" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SYSC4001_A2_P3" TARGET_NAME="sim" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SYSC4001_A2_P3" RUN_TARGET_NAME="sim">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="sim" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" WORKING_DIR="file:///home/nooriii/CLionProjects/Assignment_2/SYSC4001_A2_P3" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SYSC4001_A2_P3" TARGET_NAME="sim" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SYSC4001_A2_P3" RUN_TARGET_NAME="sim">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -99,8 +144,17 @@
       <updated>1762457569237</updated>
       <workItem from="1762457569467" duration="8000" />
       <workItem from="1762457600745" duration="617000" />
-      <workItem from="1762458230342" duration="2238000" />
+      <workItem from="1762458230342" duration="16518000" />
     </task>
+    <task id="LOCAL-00001" summary="Added placeholder program files">
+      <option name="closed" value="true" />
+      <created>1762527558426</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762527558426</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,5 +164,9 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added placeholder program files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added placeholder program files" />
   </component>
 </project>

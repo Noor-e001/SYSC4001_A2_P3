@@ -1,6 +1,0 @@
-Program name: program2
-Memory required: 15
-CPU Burst 1: 15
-I/O start (device=3)
-CPU Burst 2: 10
-End of program
