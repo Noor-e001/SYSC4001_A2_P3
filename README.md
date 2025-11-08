@@ -1,4 +1,4 @@
-## SYSC4001 Assignment 2 — Part 3: Simulation Build and Results
+## SYSC4001 Assignment 2, Part 3: Simulation Build and Results
 Overview
 This project implements a simplified simulation of an interrupt-driven execution environment for SYSC4001: Operating Systems.
 It demonstrates the interaction between process creation (FORK), interrupt handling, and execution scheduling (EXEC, SYSCALL, END_IO).
