@@ -82,7 +82,7 @@ parse_args(int argc, char** argv) {
         try {
             delays.push_back(stoi(line));
         } catch (...) {
-            cerr << "⚠️ Invalid number in device table line: " << line << endl;
+            cerr << " Invalid number in device table line: " << line << endl;
         }
     }
     in.close();
@@ -97,7 +97,7 @@ parse_args(int argc, char** argv) {
                 external_file ef{parts[0], (unsigned)stoi(parts[1])};
                 external_files.push_back(ef);
             } catch (...) {
-                cerr << "⚠️ Invalid line in external files table: " << line << endl;
+                cerr << "Invalid line in external files table: " << line << endl;
             }
         }
     }
@@ -106,11 +106,11 @@ parse_args(int argc, char** argv) {
     return {vectors, delays, external_files};
 }
 
-// ✅ Safer Parse trace line
+// Safer Parse trace line
 tuple<string, int, string> parse_trace(string trace) {
     auto parts = split_delim(trace, ",");
     if (parts.size() < 2) {
-        cerr << "⚠️ Skipping malformed trace line: " << trace << endl;
+        cerr << "Skipping malformed trace line: " << trace << endl;
         return {"null", -1, "null"};
     }
 
@@ -126,7 +126,7 @@ tuple<string, int, string> parse_trace(string trace) {
     try {
         val = stoi(parts[1]);
     } catch (...) {
-        cerr << "⚠️ Invalid number in trace line: " << trace << endl;
+        cerr << "Invalid number in trace line: " << trace << endl;
         val = 0;
     }
 
