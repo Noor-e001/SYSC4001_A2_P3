@@ -36,7 +36,7 @@ int main() {
         string devFile = inputDir + "/device_table.txt";
         string extFile = inputDir + "/external_files.txt";
 
-        // ✅ Proper C++ way to simulate argv array
+        // Proper C++ way to simulate argv array
         std::vector<char*> argvVec;
         argvVec.push_back((char*)"sim");
         argvVec.push_back((char*)tracePath.c_str());
@@ -69,7 +69,7 @@ int main() {
         }
         traceInput.close();
 
-        // ✅ Run the simulation
+        //  Run the simulation
         auto [execution, system_status, _] =
             simulate_trace(trace_lines, 0, vectors, delays, external_files, current, wait_queue);
 
