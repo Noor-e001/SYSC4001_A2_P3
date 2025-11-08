@@ -5,18 +5,17 @@
 13, 17, cloning the PCB
 30, 0, scheduler called
 30, 1, IRET
-31, 1, IF_CHILD
-32,1,switch to kernel mode
-33,10,context saved
-43,1,find vector 3 in 0x0006
-44,1,load 0X042B into PC
-45, 16, Program is 0MB large
-61, 0, loading program into memory
-61, 3, marking partition as occupied
-64, 6, updating PCB
-70, 0, scheduler called
-70, 1, IRET
-71, 100, CPU Burst
+864, 1, IF_CHILD
+865,1,switch to kernel mode
+866,10,context saved
+876,1,find vector 3 in 0x0006
+877,1,load 0X042B into PC
+878, 16, Program is 10MB large
+894, 150, loading program into memory
+1044, 3, marking partition as occupied
+1047, 6, updating PCB
+1053, 0, scheduler called
+1053, 1, IRET
 220, 1, IF_PARENT
 221, 1, ENDIF
 222, 205, CPU Burst

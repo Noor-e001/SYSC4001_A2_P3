@@ -17,6 +17,5 @@
 112, 6, updating PCB
 118, 0, scheduler called
 118, 1, IRET
-119, 100, CPU Burst
-268, 1, ENDIF
-269, 10, CPU Burst
+119, 1, ENDIF
+120, 10, CPU Burst

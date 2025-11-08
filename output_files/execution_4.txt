@@ -16,6 +16,5 @@
 106, 6, updating PCB
 112, 0, scheduler called
 112, 1, IRET
-113, 100, CPU Burst
-262, 1, IF_PARENT
-263, 1, ENDIF
+113, 1, IF_PARENT
+114, 1, ENDIF
