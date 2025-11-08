@@ -80,6 +80,9 @@ parse_args(int argc, char** argv) {
         line.erase(remove_if(line.begin(), line.end(), ::isspace), line.end()); // trim spaces
         if (line.empty()) continue; // skip blank lines
         try {
+            vector<string> parts = split_delim(line, ",");
+            string secondPart = parts.size() >1 ? parts[1] : line;
+            line = secondPart;
             delays.push_back(stoi(line));
         } catch (...) {
             cerr << " Invalid number in device table line: " << line << endl;
@@ -169,15 +172,32 @@ void print_external_files(vector<external_file> files) {
         cout << "  " << f.program_name << " (" << f.size << " KB)\n";
 }
 
-// Print PCB table
+// Print PCB table (formatted box style)
 string print_PCB(PCB current, vector<PCB> list) {
     stringstream ss;
-    ss << "PID\tProgram\tPart#\tSize\tState\n";
-    ss << current.PID << "\t" << current.program_name << "\t"
-       << current.partition_number << "\t" << current.size << "\tRunning\n";
-    for (auto &p : list)
-        ss << p.PID << "\t" << p.program_name << "\t"
-           << p.partition_number << "\t" << p.size << "\tWaiting\n";
+    const int width = 60;
+
+    ss << "+-----------------------------------------------------------+\n";
+    ss << "| PID | Program Name | Partition # | Size |     State      |\n";
+    ss << "+-----------------------------------------------------------+\n";
+
+    // Current (running) process
+    ss << "| " << setw(3) << current.PID
+       << " | " << setw(12) << left << current.program_name
+       << " | " << setw(12) << right << current.partition_number
+       << " | " << setw(4) << right << current.size
+       << " | " << setw(12) << left << "running" << " |\n";
+
+    // Waiting processes
+    for (auto &p : list) {
+        ss << "| " << setw(3) << p.PID
+           << " | " << setw(12) << left << p.program_name
+           << " | " << setw(12) << right << p.partition_number
+           << " | " << setw(4) << right << p.size
+           << " | " << setw(12) << left << "waiting" << " |\n";
+    }
+
+    ss << "+-----------------------------------------------------------+\n";
     return ss.str();
 }
 
