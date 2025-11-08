@@ -6,43 +6,18 @@ time: 24; current trace: FORK, 10
 | 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
-time: 25; current trace: IF_CHILD, 0
+time: 247; current trace: EXEC program1, 50
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               5 |    1 |running  |
+|   1 |program1     |               5 |    0 |running  |
 | 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
-time: 25; current trace: EXECprogram1_1, 50
+time: 668; current trace: EXEC program2, 25
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               5 |    1 |running  |
-| 0   |init         |               6 |    1 |waiting  |
-+------------------------------------------------------+
-
-time: 26; current trace: IF_PARENT, 0
-+------------------------------------------------------+
-| PID |program name |partition number | size |   state |
-+------------------------------------------------------+
-|   1 |init         |               5 |    1 |running  |
-| 0   |init         |               6 |    1 |waiting  |
-+------------------------------------------------------+
-
-time: 26; current trace: EXECprogram2_1, 25
-+------------------------------------------------------+
-| PID |program name |partition number | size |   state |
-+------------------------------------------------------+
-|   1 |init         |               5 |    1 |running  |
-| 0   |init         |               6 |    1 |waiting  |
-+------------------------------------------------------+
-
-time: 27; current trace: ENDIF, 0
-+------------------------------------------------------+
-| PID |program name |partition number | size |   state |
-+------------------------------------------------------+
-|   1 |init         |               5 |    1 |running  |
-| 0   |init         |               6 |    1 |waiting  |
+|   0 |program2     |               6 |    0 |running  |
 +------------------------------------------------------+
 

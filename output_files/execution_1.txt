@@ -6,7 +6,27 @@
 23, 0, scheduler called
 23, 1, IRET
 24, 1, IF_CHILD
-25, 0, Unknown trace line: EXEC program1_1, 50
-25, 1, IF_PARENT
-26, 0, Unknown trace line: EXEC program2_1, 25
-26, 1, ENDIF
+25,1,switch to kernel mode
+26,10,context saved
+36,1,find vector 3 in 0x0006
+37,1,load 0X042B into PC
+38, 50, Program is 0MB large
+88, 0, loading program into memory
+88, 3, marking partition as occupied
+91, 6, updating PCB
+97, 0, scheduler called
+97, 1, IRET
+98, 100, CPU Burst
+247, 1, IF_PARENT
+248,1,switch to kernel mode
+249,10,context saved
+259,1,find vector 3 in 0x0006
+260,1,load 0X042B into PC
+261, 25, Program is 0MB large
+286, 0, loading program into memory
+286, 3, marking partition as occupied
+289, 6, updating PCB
+295, 0, scheduler called
+295, 1, IRET
+296, 250, SYSCALL ISR
+668, 1, ENDIF
