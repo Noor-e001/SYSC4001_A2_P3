@@ -2,47 +2,47 @@ time: 31; current trace: FORK, 17
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               3 |    1 |running  |
-| 0   |init         |               4 |    1 |waiting  |
+|   1 |init         |               5 |    1 |running  |
+| 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
 time: 32; current trace: IF_CHILD, 0
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               3 |    1 |running  |
-| 0   |init         |               4 |    1 |waiting  |
+|   1 |init         |               5 |    1 |running  |
+| 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
 time: 32; current trace: EXECprogram1_2, 16
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               3 |    1 |running  |
-| 0   |init         |               4 |    1 |waiting  |
+|   1 |init         |               5 |    1 |running  |
+| 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
 time: 33; current trace: IF_PARENT, 0
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               3 |    1 |running  |
-| 0   |init         |               4 |    1 |waiting  |
+|   1 |init         |               5 |    1 |running  |
+| 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
 time: 34; current trace: ENDIF, 0
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               3 |    1 |running  |
-| 0   |init         |               4 |    1 |waiting  |
+|   1 |init         |               5 |    1 |running  |
+| 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 
 time: 239; current trace: CPU, 205
 +------------------------------------------------------+
 | PID |program name |partition number | size |   state |
 +------------------------------------------------------+
-|   1 |init         |               3 |    1 |running  |
-| 0   |init         |               4 |    1 |waiting  |
+|   1 |init         |               5 |    1 |running  |
+| 0   |init         |               6 |    1 |waiting  |
 +------------------------------------------------------+
 

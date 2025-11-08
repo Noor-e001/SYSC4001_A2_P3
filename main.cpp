@@ -5,6 +5,9 @@
 using namespace std;
 namespace fs = std::filesystem;
 
+// 🔹 Declare the reset function (implemented in interrupts cpp)
+extern void reset_memory();
+
 int main() {
     vector<string> traceFiles = {
         "input_files/trace_1.txt",
@@ -30,6 +33,9 @@ int main() {
 
         cout << "\n=== Running Simulation " << simIndex
              << " (" << tracePath << ") ===\n";
+
+        // 🔹 Reset memory before each simulation
+        reset_memory();
 
         // Define configuration files
         string vecFile = inputDir + "/vector_table.txt";

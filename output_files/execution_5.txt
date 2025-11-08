@@ -1,7 +1,12 @@
 0,1,switch to kernel mode
-1,2,context saved
-3,1,find vector 0 in 0x0000
-4,1,load 0X01E3 into PC
-45,1,IF_CHILD
-46,1,IF_PARENT
-47,1,ENDIF
+1,10,context saved
+11,1,find vector 2 in 0x0004
+12,1,load 0X0695 into PC
+13, 40, cloning the PCB
+53, 0, scheduler called
+53, 1, IRET
+54, 1, IF_CHILD
+55, 0, Unknown trace line: EXEC program1_5, 30
+55, 1, IF_PARENT
+56, 0, Unknown trace line: EXEC program3_5, 10
+56, 1, ENDIF

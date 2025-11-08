@@ -39,6 +39,14 @@ bool allocate_memory(PCB* current) {
 void free_memory(PCB* process) {
     memory[process->partition_number - 1].code = "empty";
     process->partition_number = -1;
+
+}
+
+// 🔹 Reset all memory partitions to "empty" (call this before each simulation)
+void reset_memory() {
+    for (auto& part : memory) {
+        part.code = "empty";
+    }
 }
 
 // Split helper
@@ -349,4 +357,3 @@ tuple<string, string, int> simulate_trace(vector<string> trace_file, int start_t
 
     return {exec_log, sys_log, t};
 }
-
