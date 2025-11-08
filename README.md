@@ -8,39 +8,8 @@ The project was developed, built, and tested under WSL Ubuntu 24.04 using CLion 
 
 ## Team Members
 Student 1: Noor E (101297993)
-Student 2: Lina Elsayed (101302793)
 
-Directory Structure
-SYSC4001_A2_P3/
-│
-├── CMakeLists.txt
-├── main.cpp
-├── Interrupts_101297993_101302793.cpp
-├── interrupts_101297993_101302793.hpp
-│
-├── input_files/
-│   ├── device_table.txt
-│   ├── external_files.txt
-│   ├── vector_table.txt
-│   ├── trace_1.txt
-│   ├── trace_2.txt
-│   ├── trace_3.txt
-│   ├── trace_4.txt
-│   └── trace_5.txt
-│
-├── output_files/
-│   ├── execution_1.txt
-│   ├── system_status_1.txt
-│   ├── execution_2.txt
-│   ├── system_status_2.txt
-│   ├── execution_3.txt
-│   ├── system_status_3.txt
-│   ├── execution_4.txt
-│   ├── system_status_4.txt
-│   ├── execution_5.txt
-│   └── system_status_5.txt
-│
-└── build/     
+Student 2: Lina Elsayed (101302793)
 
 ## Build Instructions:
 Open the project in CLion under your WSL (Ubuntu 24.04) environment.
