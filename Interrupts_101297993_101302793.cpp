@@ -66,24 +66,39 @@ parse_args(int argc, char** argv) {
     vector<int> delays;
     vector<external_file> external_files;
 
+    // --- Vector table ---
     in.open(argv[2]);
     if (!in.is_open()) { cerr << "Cannot open " << argv[2] << endl; exit(1); }
     string line;
     while (getline(in, line)) vectors.push_back(line);
     in.close();
 
+    // --- Device table (safe stoi) ---
     in.open(argv[3]);
     if (!in.is_open()) { cerr << "Cannot open " << argv[3] << endl; exit(1); }
-    while (getline(in, line)) delays.push_back(stoi(line));
+    while (getline(in, line)) {
+        line.erase(remove_if(line.begin(), line.end(), ::isspace), line.end()); // trim spaces
+        if (line.empty()) continue; // skip blank lines
+        try {
+            delays.push_back(stoi(line));
+        } catch (...) {
+            cerr << "⚠️ Invalid number in device table line: " << line << endl;
+        }
+    }
     in.close();
 
+    // --- External files ---
     in.open(argv[4]);
     if (!in.is_open()) { cerr << "Cannot open " << argv[4] << endl; exit(1); }
     while (getline(in, line)) {
         auto parts = split_delim(line, ",");
         if (parts.size() == 2) {
-            external_file ef{parts[0], (unsigned)stoi(parts[1])};
-            external_files.push_back(ef);
+            try {
+                external_file ef{parts[0], (unsigned)stoi(parts[1])};
+                external_files.push_back(ef);
+            } catch (...) {
+                cerr << "⚠️ Invalid line in external files table: " << line << endl;
+            }
         }
     }
     in.close();
@@ -91,14 +106,31 @@ parse_args(int argc, char** argv) {
     return {vectors, delays, external_files};
 }
 
-// Parse trace line
+// ✅ Safer Parse trace line
 tuple<string, int, string> parse_trace(string trace) {
     auto parts = split_delim(trace, ",");
-    if (parts.size() < 2) return {"null", -1, "null"};
-    string activity = parts[0];
-    int val = stoi(parts[1]);
-    string extra = "null";
+    if (parts.size() < 2) {
+        cerr << "⚠️ Skipping malformed trace line: " << trace << endl;
+        return {"null", -1, "null"};
+    }
 
+    // Trim whitespace
+    auto trim = [](string &s) {
+        s.erase(remove_if(s.begin(), s.end(), ::isspace), s.end());
+    };
+    trim(parts[0]);
+    trim(parts[1]);
+
+    string activity = parts[0];
+    int val = 0;
+    try {
+        val = stoi(parts[1]);
+    } catch (...) {
+        cerr << "⚠️ Invalid number in trace line: " << trace << endl;
+        val = 0;
+    }
+
+    string extra = "null";
     auto exec = split_delim(parts[0], " ");
     if (exec[0] == "EXEC" && exec.size() > 1)
         extra = exec[1];
