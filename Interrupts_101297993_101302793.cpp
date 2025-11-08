@@ -208,49 +208,145 @@ unsigned int get_size(string name, vector<external_file> files) {
     return 0;
 }
 
-// Simulate trace
-tuple<string, string, int> simulate_trace(vector<string> trace_file, int time,
+// Simulate trace with correct running/waiting states and interrupt timing
+tuple<string, string, int> simulate_trace(vector<string> trace_file, int start_time,
                                           vector<string> vectors, vector<int> delays,
                                           vector<external_file> ext_files, PCB current,
-                                          vector<PCB> wait_queue) {
+                                          vector<PCB> wait_queue)
+{
     string exec_log;
     string sys_log;
-    int context_save_time = 2;
-    int current_time = time;
 
-    for (auto &line : trace_file) {
+    int t = start_time;
+    unsigned next_pid = current.PID + 1;
+
+    auto snapshot = [&](const string& label, int val) {
+        // header line like: time: 24; current trace: FORK, 10
+        sys_log += "time: " + to_string(t) + "; current trace: " + label + ", " + to_string(val) + "\n";
+        // pretty PCB table (running first, then waiting)
+        stringstream pcb;
+        pcb << "+------------------------------------------------------+\n";
+        pcb << "| PID |program name |partition number | size |   state |\n";
+        pcb << "+------------------------------------------------------+\n";
+        // running (current)
+        pcb << "| " << setw(3) << current.PID
+            << " |" << setw(12) << left << current.program_name
+            << " |" << setw(16) << right << current.partition_number
+            << " |" << setw(5) << right << current.size
+            << " |" << setw(8) << left << "running" << " |\n";
+        // waiting (queue)
+        for (const auto& p : wait_queue) {
+            pcb << "| " << setw(3) << p.PID
+                << " |" << setw(12) << left << p.program_name
+                << " |" << setw(16) << right << p.partition_number
+                << " |" << setw(5) << right << p.size
+                << " |" << setw(8) << left << "waiting" << " |\n";
+        }
+        pcb << "+------------------------------------------------------+\n\n";
+        sys_log += pcb.str();
+    };
+
+    for (const auto& line : trace_file) {
         auto [activity, val, extra] = parse_trace(line);
 
-        // Header for current step in system status
-        sys_log += "time: " + to_string(current_time) + "; current trace: " + activity;
-        if (extra != "null") sys_log += " " + extra;
-        sys_log += ", " + to_string(val) + "\n";
+        // Make the label match your screenshot style (e.g., "EXEC program1_1")
+        string label = (activity == "EXEC" && extra != "null") ? ("EXEC " + extra) : activity;
 
-        // Separator between time steps
-        sys_log += print_PCB(current, wait_queue) + "\n";
-
-        // ---- Execute corresponding activity ----
         if (activity == "FORK") {
-            auto [log, new_time] = intr_boilerplate(current_time, 0, context_save_time, vectors);
-            exec_log += log;
-            current_time = new_time + val;
-        }
-        else if (activity == "EXEC") {
-            unsigned sz = get_size(extra, ext_files);
-            PCB newpcb(current.PID + 1, current.PID, extra, sz, -1);
-            if (allocate_memory(&newpcb)) {
-                exec_log += to_string(current_time) + ", " + to_string(val) + ", executing " + extra + "\n";
-                current_time += val;
-                free_memory(&newpcb);
+            // Do the interrupt boilerplate (this is what bumps the time noticeably)
+            {
+                auto [intr, t2] = intr_boilerplate(t, /*intr_num*/2, /*context_save_time*/10, vectors);
+                exec_log += intr;
+                t = t2;
             }
+
+            // “cloning the PCB” step (use the provided duration on the line, e.g., 10)
+            exec_log += to_string(t) + ", " + to_string(val) + ", cloning the PCB\n";
+            t += val;
+
+            // scheduler + IRET (match the style from the starter)
+            exec_log += to_string(t) + ", 0, scheduler called\n";
+            exec_log += to_string(t) + ", 1, IRET\n";
+            t += 1;
+
+            // Actually perform the fork: parent waits, child runs
+            PCB child(next_pid++, current.PID, "init", /*size*/1, /*partition*/-1);
+            // allocate child in best-fit (your allocate_memory picks from smallest up)
+            if (!allocate_memory(&child)) {
+                exec_log += to_string(t) + ", 0, FORK failed (no memory)\n";
+            } else {
+                // parent (old current) becomes waiting
+                wait_queue.push_back(current);
+                // child becomes the running current
+                current = child;
+            }
+
+            snapshot(label, val);
         }
         else if (activity == "IF_CHILD" || activity == "IF_PARENT" || activity == "ENDIF") {
-            exec_log += to_string(current_time) + ",1," + activity + "\n";
-            current_time++;
+            // Just log a small step for these markers to move the clock a bit
+            exec_log += to_string(t) + ", 1, " + activity + "\n";
+            t += 1;
+            snapshot(label, val);
+        }
+        else if (activity == "EXEC") {
+            // Interrupt boilerplate for EXEC
+            {
+                auto [intr, t2] = intr_boilerplate(t, /*intr_num*/3, /*context_save_time*/10, vectors);
+                exec_log += intr;
+                t = t2;
+            }
+
+            // Pull size of the external program
+            unsigned prog_size = get_size(extra, ext_files);
+
+            // A few illustrative steps like the starter shows
+            exec_log += to_string(t) + ", " + to_string(val)
+                      + ", Program is " + to_string(prog_size) + "MB large\n";
+            t += val;
+
+            // Loading time proportional to size (15 per MB like the template)
+            int load_time = static_cast<int>(prog_size) * 15;
+            exec_log += to_string(t) + ", " + to_string(load_time) + ", loading program into memory\n";
+            t += load_time;
+
+            exec_log += to_string(t) + ", 3, marking partition as occupied\n"; t += 3;
+            exec_log += to_string(t) + ", 6, updating PCB\n"; t += 6;
+            exec_log += to_string(t) + ", 0, scheduler called\n";
+            exec_log += to_string(t) + ", 1, IRET\n"; t += 1;
+
+            // Update the running process to be this program; re-place it in memory
+            free_memory(&current);
+            current.program_name = extra;
+            current.size = prog_size;
+            allocate_memory(&current);
+
+            snapshot(label, val);
+        }
+        else if (activity == "CPU") {
+            exec_log += to_string(t) + ", " + to_string(val) + ", CPU Burst\n";
+            t += val;
+            snapshot(label, val);
+        }
+        else if (activity == "SYSCALL" || activity == "END_IO") {
+            int intr_num = val; // using the provided device/interrupt number
+            auto [intr, t2] = intr_boilerplate(t, intr_num, /*context_save_time*/10, vectors);
+            exec_log += intr;
+            t = t2;
+            // device service time from table if in-range, else 0
+            int svc = (intr_num >= 0 && intr_num < static_cast<int>(delays.size())) ? delays[intr_num] : 0;
+            exec_log += to_string(t) + ", " + to_string(svc) + ", " + activity + " ISR\n";
+            t += svc;
+            exec_log += to_string(t) + ", 1, IRET\n"; t += 1;
+            snapshot(activity, val);
+        }
+        else {
+            // Unknown line, keep going
+            exec_log += to_string(t) + ", 0, Unknown trace line: " + line + "\n";
+            snapshot(activity, val);
         }
     }
 
-    // Final PCB snapshot
-    sys_log += print_PCB(current, wait_queue);
-    return {exec_log, sys_log, current_time};
+    return {exec_log, sys_log, t};
 }
+
