@@ -216,30 +216,41 @@ tuple<string, string, int> simulate_trace(vector<string> trace_file, int time,
     string exec_log;
     string sys_log;
     int context_save_time = 2;
+    int current_time = time;
 
     for (auto &line : trace_file) {
         auto [activity, val, extra] = parse_trace(line);
 
+        // Header for current step in system status
+        sys_log += "time: " + to_string(current_time) + "; current trace: " + activity;
+        if (extra != "null") sys_log += " " + extra;
+        sys_log += ", " + to_string(val) + "\n";
+
+        // Separator between time steps
+        sys_log += print_PCB(current, wait_queue) + "\n";
+
+        // ---- Execute corresponding activity ----
         if (activity == "FORK") {
-            auto [log, new_time] = intr_boilerplate(time, 0, context_save_time, vectors);
+            auto [log, new_time] = intr_boilerplate(current_time, 0, context_save_time, vectors);
             exec_log += log;
-            time = new_time;
+            current_time = new_time + val;
         }
         else if (activity == "EXEC") {
             unsigned sz = get_size(extra, ext_files);
             PCB newpcb(current.PID + 1, current.PID, extra, sz, -1);
             if (allocate_memory(&newpcb)) {
-                exec_log += to_string(time) + ", " + to_string(val) + ", executing " + extra + "\n";
-                time += val;
+                exec_log += to_string(current_time) + ", " + to_string(val) + ", executing " + extra + "\n";
+                current_time += val;
                 free_memory(&newpcb);
             }
         }
         else if (activity == "IF_CHILD" || activity == "IF_PARENT" || activity == "ENDIF") {
-            exec_log += to_string(time) + ",1," + activity + "\n";
-            time++;
+            exec_log += to_string(current_time) + ",1," + activity + "\n";
+            current_time++;
         }
     }
 
-    sys_log = print_PCB(current, wait_queue);
-    return {exec_log, sys_log, time};
+    // Final PCB snapshot
+    sys_log += print_PCB(current, wait_queue);
+    return {exec_log, sys_log, current_time};
 }
